@@ -1,18 +1,15 @@
 @echo off
-chcp 65001 >nul
-echo === Workbook - локальный запуск (Windows) ===
+cd /d "%~dp0"
+echo === Workbook - Docker run ===
 echo.
 
-REM Проверка Docker
 docker --version >nul 2>&1
-if errorlevel 1 (
-    echo [Ошибка] Docker не найден. Установите Docker Desktop: https://www.docker.com/products/docker-desktop/
+if %ERRORLEVEL% NEQ 0 (
+    echo [Error] Docker not found. Install Docker Desktop: https://www.docker.com/products/docker-desktop/
     pause
     exit /b 1
 )
 
-REM Вариант A: только Docker (без npm)
-echo Вариант A: Docker (приложение + БД)
-echo.
+echo Starting app + PostgreSQL...
 docker compose up --build
 pause

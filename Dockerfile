@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Prisma generate needs DATABASE_URL (dummy for build)
+ENV DATABASE_URL="postgresql://localhost:5432/dummy"
+
 COPY package.json package-lock.json* ./
 RUN npm install
 
