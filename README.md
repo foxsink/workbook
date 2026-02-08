@@ -4,13 +4,42 @@
 
 ## Требования
 
-- **Node.js** 20+
-- **Docker** и **Docker Compose** (для PostgreSQL)
-- **npm** или pnpm/yarn
+- **Node.js** 20+ и **npm** — для локальной разработки
+- **Docker** и **Docker Compose** — для запуска (в т.ч. без Node.js)
 
-## Быстрый старт
+## Windows: быстрый запуск
 
-### 1. Клонировать и установить зависимости
+После клонирования запустите в папке проекта:
+
+| Режим | Скрипт | Требования |
+|-------|--------|------------|
+| Только Docker | `run.bat` | Docker Desktop |
+| Локальная разработка | `run-dev.bat` | Node.js 20+ и Docker Desktop |
+
+Оба скрипта проверяют наличие нужных программ и выводят подсказки при ошибках.
+
+## Вариант A: Только Docker (без npm)
+
+Подходит, если Node.js не установлен. Нужны только Docker и Docker Compose.
+
+```bash
+git clone <url-репозитория> workbook
+cd workbook
+docker compose up --build
+```
+
+**Windows (cmd):**
+```cmd
+git clone <url-репозитория> workbook
+cd workbook
+run.bat
+```
+
+Приложение: [http://localhost:3000](http://localhost:3000). Миграции применяются при старте.
+
+## Вариант B: Локальная разработка
+
+### 1. Установить зависимости
 
 ```bash
 git clone <url-репозитория> workbook
@@ -22,24 +51,20 @@ npm install
 
 ```bash
 npm run db:up
-# или: docker compose up -d
+# или: docker compose up -d postgres
 ```
-
-Проверить: `docker compose ps` — контейнер `workbook-db` должен быть в состоянии `running`.
 
 ### 3. Настроить переменные окружения
 
 ```bash
 cp .env.example .env
 ```
-
-При необходимости отредактируйте `.env` (по умолчанию подходит для docker-compose).
+Windows (cmd): `copy .env.example .env`
 
 ### 4. Применить миграции БД
 
 ```bash
 npm run db:migrate
-# или: npx prisma migrate deploy
 ```
 
 ### 5. Запустить приложение
@@ -48,7 +73,16 @@ npm run db:migrate
 npm run dev
 ```
 
-Приложение доступно на [http://localhost:3000](http://localhost:3000).
+Приложение: [http://localhost:3000](http://localhost:3000).
+
+**Windows (cmd):**
+```cmd
+git clone <url-репозитория> workbook
+cd workbook
+run-dev.bat
+```
+
+Скрипт установит зависимости, запустит PostgreSQL, создаст `.env` и применит миграции.
 
 ## Скрипты
 
@@ -57,7 +91,8 @@ npm run dev
 | `npm run dev` | Режим разработки |
 | `npm run build` | Сборка для production |
 | `npm run preview` | Превью production-сборки |
-| `npx prisma migrate deploy` | Применить миграции |
+| `npm run db:up` | Запустить PostgreSQL (Docker) |
+| `npm run db:migrate` | Применить миграции БД |
 | `npx prisma studio` | Открыть Prisma Studio (GUI для БД) |
 
 ## Структура
@@ -65,13 +100,11 @@ npm run dev
 - **`app/`** — Nuxt/Vue приложение (FSD)
 - **`server/`** — API routes
 - **`prisma/`** — схема БД и миграции
-- **`docker-compose.yml`** — PostgreSQL
+- **`Dockerfile`** — образ приложения
+- **`docker-compose.yml`** — PostgreSQL + приложение
 
 ## Production
 
-```bash
-npm run build
-npm run preview  # для проверки
-```
+**Docker:** `docker compose up --build` — сразу production-сборка.
 
-Для деплоя потребуется Node.js-хостинг и PostgreSQL. `DATABASE_URL` задаётся в окружении.
+**Без Docker:** `npm run build && npm run preview`. Нужны Node.js и PostgreSQL. `DATABASE_URL` задаётся в окружении.
