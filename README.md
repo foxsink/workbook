@@ -21,7 +21,8 @@ npm install
 ### 2. Запустить PostgreSQL
 
 ```bash
-docker compose up -d
+npm run db:up
+# или: docker compose up -d
 ```
 
 Проверить: `docker compose ps` — контейнер `workbook-db` должен быть в состоянии `running`.
@@ -37,7 +38,8 @@ cp .env.example .env
 ### 4. Применить миграции БД
 
 ```bash
-npx prisma migrate deploy
+npm run db:migrate
+# или: npx prisma migrate deploy
 ```
 
 ### 5. Запустить приложение

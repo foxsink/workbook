@@ -7,7 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:up": "docker compose up -d",
+    "db:migrate": "prisma migrate deploy"
   },
   "dependencies": {
     "@milkdown/kit": "^7.18.0",
