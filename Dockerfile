@@ -22,16 +22,12 @@ ENV NODE_ENV=production
 ENV NITRO_HOST=0.0.0.0
 ENV NITRO_PORT=3000
 
-# Копируем приложение и Prisma (без npm install — копируем из builder)
+# Копируем приложение и полный node_modules (Prisma migrate требует все зависимости)
 COPY --from=builder /app/.output ./
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/package.json ./node_modules/package.json
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
-COPY --from=builder /app/node_modules/prisma/build/*.wasm ./node_modules/.bin/
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 3000
 
