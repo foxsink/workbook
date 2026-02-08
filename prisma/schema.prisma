@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MaterialType {
+  VIDEO
+  ARTICLE
+  PDF
+  OTHER
+}
+
+model Folder {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  sortOrder Int        @default(0)
+  parentId  String?    @db.Uuid
+  parent    Folder?    @relation("FolderTree", fields: [parentId], references: [id])
+  children  Folder[]   @relation("FolderTree")
+  materials Material[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Material {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  type        MaterialType @default(OTHER)
+  url         String?
+  description String?
+  folderId    String?      @db.Uuid
+  folder      Folder?      @relation(fields: [folderId], references: [id])
+  notes       Note[]
+  tags        Tag[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Note {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title      String
+  content    String      @default("")
+  materialId String      @db.Uuid
+  material   Material    @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  timestamps Timestamp[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Timestamp {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  seconds Int
+  label   String
+  noteId  String @db.Uuid
+  note    Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String     @unique
+  color     String     @default("#6366f1")
+  materials Material[]
+}
+
+model NoteLink {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sourceNoteId String @db.Uuid
+  targetNoteId String @db.Uuid
+}

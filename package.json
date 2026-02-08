@@ -1,0 +1,31 @@
+{
+  "name": "workbook",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@milkdown/kit": "^7.18.0",
+    "@milkdown/theme-nord": "^7.18.0",
+    "@milkdown/vue": "^7.18.0",
+    "@nuxt/ui": "^4.0.0-alpha.2",
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "nuxt": "^4.3.1",
+    "pg": "^8.18.0",
+    "plyr": "^3.8.4",
+    "vue": "^3.5.27",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.3",
+    "@iconify-json/lucide": "^1.2.89",
+    "@types/pg": "^8.16.0",
+    "prisma": "^7.3.0"
+  }
+}
